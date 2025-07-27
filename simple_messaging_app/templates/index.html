@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Chat</title>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+</head>
+<body>
+    <h2>Chat App</h2>
+    <input type="text" id="username" placeholder="Enter username" />
+    <div id="messages" style="height: 200px; overflow-y: scroll; border: 1px solid #ccc;"></div>
+    <input type="text" id="message" placeholder="Type message..." />
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+        const socket = io();
+
+        socket.on('message', function(data) {
+            const box = document.getElementById("messages");
+            box.innerHTML += `<p><strong>${data.username}:</strong> ${data.message}</p>`;
+            box.scrollTop = box.scrollHeight;
+        });
+
+        function sendMessage() {
+            const username = document.getElementById("username").value;
+            const message = document.getElementById("message").value;
+            if (username && message) {
+                socket.send({ username, message });
+                document.getElementById("message").value = "";
+            }
+        }
+    </script>
+</body>
+</html>
