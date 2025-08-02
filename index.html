@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat App</title>
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+</head>
+<body>
+    <h2>Chat Room</h2>
+    <input id="username" placeholder="Your name" />
+    <input id="message" placeholder="Message..." />
+    <button onclick="sendMessage()">Send</button>
+    <ul id="chatbox"></ul>
+
+    <script>
+        const socket = io("https://your-app.onrender.com");
+
+        socket.on("message", (data) => {
+            const chatbox = document.getElementById("chatbox");
+            const item = document.createElement("li");
+            item.textContent = `${data.username}: ${data.message}`;
+            chatbox.appendChild(item);
+        });
+
+        function sendMessage() {
+            const username = document.getElementById("username").value;
+            const message = document.getElementById("message").value;
+            socket.send({ username, message });
+        }
+    </script>
+</body>
+</html>
